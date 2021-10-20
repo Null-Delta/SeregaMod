@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "yyy",
+    "yxy",
+    "yyy"
+  ],
+  "key": {
+    "x": {
+      "item": "seregamod:testo"
+    },
+    "y": {
+      "item": "minecraft:chicken"
+    }
+  },
+  "result": {
+    "item": "seregamod:pelmen",
+    "count": 1
+  }
+}

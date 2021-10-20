@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "seregamod:block/tinkoff_block" }
+  }
+}

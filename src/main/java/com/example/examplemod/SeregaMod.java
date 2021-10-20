@@ -1,7 +1,11 @@
 package com.example.examplemod;
 
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -9,6 +13,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,6 +32,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -38,7 +44,29 @@ public class SeregaMod
 
     private static DeferredRegister<Item> items = DeferredRegister.create(ForgeRegistries.ITEMS,"seregamod");
 
-    private static RegistryObject<Item> PELMEN = items.register("pelmen",
+    public static final DeferredRegister<Block> BLOCKS
+            = DeferredRegister.create(ForgeRegistries.BLOCKS, "seregamod");
+
+    private static RegistryObject<Item> TESTO = items.register("testo",
+            () -> new Item(new Item.Properties().tab(ItemGroup.TAB_FOOD))
+    );
+
+    public static final RegistryObject<Block> TINKOFF_BLOCK = registerBlock("tinkoff_block",
+            () -> new Block(AbstractBlock.Properties.of(Material.STONE))
+    );
+
+    private static <T extends Block>RegistryObject<T> registerBlock(String name, Supplier<T> block) {
+        RegistryObject<T> toReturn = BLOCKS.register(name, block);
+        registerBlockItem(name, toReturn);
+        return toReturn;
+    }
+
+    private static <T extends Block> void registerBlockItem(String name, RegistryObject<T> block) {
+        items.register(name, () -> new BlockItem(block.get(),
+                new Item.Properties().tab(ItemGroup.TAB_FOOD)));
+    }
+
+    public static RegistryObject<Item> PELMEN = items.register("pelmen",
             () -> new Item(
                     new Item.Properties()
                             .tab(ItemGroup.TAB_FOOD)
@@ -81,13 +109,18 @@ public class SeregaMod
         bus.addListener(this::setup);
         // Register ourselves for server and other game events we are interested in
         items.register(bus);
+        BLOCKS.register(bus);
+
+        VillagerUnit.VILLAGER_PROFESSIONS.register(bus);
+        VillagerUnit.POINT_OF_INTEREST_TYPES.register(bus);
 
         MinecraftForge.EVENT_BUS.register(this);
+
 
     }
 
     private void setup(final FMLCommonSetupEvent event)
     {
-
+        VillagerUnit.registration();
     }
 }
