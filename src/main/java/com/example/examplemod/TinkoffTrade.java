@@ -27,6 +27,6 @@ class TinkoffTrade implements VillagerTrades.ITrade {
 
     public MerchantOffer getOffer(Entity p_221182_1_, Random p_221182_2_) {
         ItemStack itemstack = new ItemStack(this.item, this.cost);
-        return new MerchantOffer(itemstack, new ItemStack(Items.EMERALD), this.maxUses, this.villagerXp, this.priceMultiplier);
+        return new MerchantOffer(itemstack, new ItemStack(SeregaMod.TINKOFF_AKZII.get()), this.maxUses, this.villagerXp, this.priceMultiplier);
     }
 }
